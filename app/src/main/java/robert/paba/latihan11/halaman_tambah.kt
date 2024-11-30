@@ -17,13 +17,6 @@ class halaman_tambah : AppCompatActivity() {
         enableEdgeToEdge()
         setContentView(R.layout.activity_halaman_tambah)
 
-        //intent
-        var _btnintent1 = findViewById<Button>(R.id.btnPesan)
-        _btnintent1.setOnClickListener {
-            val intent = Intent(this@halaman_tambah, MainActivity::class.java)
-            startActivity(intent)
-        }
-
         // Referensi ke EditText dan Button
         val _etNamaTask = findViewById<EditText>(R.id.etNamaTask)
         val _etTanggal = findViewById<EditText>(R.id.etTanggal)
@@ -50,6 +43,10 @@ class halaman_tambah : AppCompatActivity() {
             editor.apply()
 
             Toast.makeText(this, "Data berhasil disimpan", Toast.LENGTH_SHORT).show()
+
+            //pindah halaman
+            val intent = Intent(this@halaman_tambah, MainActivity::class.java)
+            startActivity(intent)
 
 
             ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
