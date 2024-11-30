@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="8dp">
+
+    <TextView
+        android:id="@+id/tvNama"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="NAMA TASK"
+        android:textSize="18dp"
+        android:paddingLeft="8dp"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/tvTanggal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DD/MM/YYYY"
+        android:textSize="18dp"
+        android:paddingLeft="8dp"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/tvKategori"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="KATEGORI"
+        android:textSize="18dp"
+        android:paddingLeft="8dp"
+        android:layout_marginTop="5dp"/>
+
+    <TextView
+        android:id="@+id/tvDeskripsi"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DESKRIPSI"
+        android:textSize="18dp"
+        android:paddingLeft="8dp"
+        android:layout_marginTop="5dp"/>
+
+    <LinearLayout
+        android:layout_marginTop="5dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:weightSum="3"
+        android:gravity="bottom"
+        >
+
+        <Button
+            android:id="@+id/btnHapus"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="HAPUS"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/btnUbah"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="UBAH"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/btnKerjakan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="KERJAKAN"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"/>
+
+        <Button
+            android:id="@+id/btnSelesai"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="SELESAI"
+            android:layout_marginStart="8dp"
+            android:layout_weight="1"
+            android:visibility="gone" />
+    </LinearLayout>
+
+</LinearLayout>
