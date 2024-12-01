@@ -14,6 +14,8 @@ class taskAdapter(private val listTask: MutableList<Task>) : RecyclerView.Adapte
     interface OnItemClickCallback {
         fun delData(pos: Int)
         fun onUpdateData(pos: Int)
+        fun onStartTask(pos: Int)
+        fun onFinishTask(pos: Int)
     }
 
     fun setOnItemClickCallback (onItemClickCallback: OnItemClickCallback){
@@ -28,6 +30,8 @@ class taskAdapter(private val listTask: MutableList<Task>) : RecyclerView.Adapte
 
         var _btnHapus =itemView.findViewById<Button>(R.id.btnHapus)
         var _btnUbah = itemView.findViewById<Button>(R.id.btnUbah)
+        var _btnKerjakan = itemView.findViewById<Button>(R.id.btnKerjakan)
+        var _btnSelesai = itemView.findViewById<Button>(R.id.btnSelesai)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
@@ -43,10 +47,30 @@ class taskAdapter(private val listTask: MutableList<Task>) : RecyclerView.Adapte
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         var Task = listTask[position]
 
+        // Atur visibilitas tombol berdasarkan status
+        if (Task.status == "idle") {
+            holder._btnUbah.isEnabled = true
+            holder._btnKerjakan.visibility = View.VISIBLE
+            holder._btnSelesai.visibility = View.GONE
+        } else if (Task.status == "ongoing") {
+            holder._btnUbah.isEnabled = false
+            holder._btnKerjakan.visibility = View.GONE
+            holder._btnSelesai.visibility = View.VISIBLE
+        }
+
         holder._namaTask.setText(Task.nama)
         holder._tanggal.setText(Task.tanggal)
         holder._kategori.setText(Task.kategori)
         holder._deskripsi.setText(Task.deskripsi)
+
+
+        holder._btnKerjakan.setOnClickListener {
+            onItemClickCallback.onStartTask(position)
+        }
+
+        holder._btnSelesai.setOnClickListener {
+            onItemClickCallback.onFinishTask(position)
+        }
 
         holder._btnHapus.setOnClickListener {
             onItemClickCallback.delData(position)

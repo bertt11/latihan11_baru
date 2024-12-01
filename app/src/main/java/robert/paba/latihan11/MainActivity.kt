@@ -4,7 +4,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.widget.Button
+import android.widget.Toast
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
@@ -122,7 +124,7 @@ class MainActivity : AppCompatActivity() {
 
 
     fun TampilkanData() {
-        TambahData() // Pastikan data selalu diperbarui
+        TambahData()
 
         rvTask = findViewById(R.id.rvTask)
         rvTask.layoutManager = LinearLayoutManager(this)
@@ -136,7 +138,7 @@ class MainActivity : AppCompatActivity() {
         // Set Adapter
         taskAdapter = taskAdapter(taskList)
         rvTask.adapter = taskAdapter
-
+        taskAdapter.notifyDataSetChanged()
         // Callback untuk menghapus data
         taskAdapter.setOnItemClickCallback(object : taskAdapter.OnItemClickCallback {
             override fun delData(pos: Int) {
@@ -166,6 +168,36 @@ class MainActivity : AppCompatActivity() {
                 intent.putExtra("kategori", _kategori[pos])
                 intent.putExtra("deskripsi", _deskripsi[pos])
                 startActivity(intent)
+            }
+
+            override fun onStartTask(pos: Int) {
+                Log.d("MainActivity", "Mulai task di posisi $pos")
+                arTask[pos].status = "ongoing"
+
+                val gson = Gson()
+                val editor = sp.edit()
+                val json = gson.toJson(arTask)
+                editor.putString("spTask", json)
+                editor.apply()
+
+                taskAdapter.notifyItemChanged(pos)
+
+                TambahData()
+                TampilkanData()
+            }
+
+            override fun onFinishTask(pos: Int) {
+                Log.d("MainActivity", "Selesai task di posisi $pos")
+                arTask.removeAt(pos)
+
+                val gson = Gson()
+                val editor = sp.edit()
+                val json = gson.toJson(arTask)
+                editor.putString("spTask", json)
+                editor.apply()
+
+                TambahData()
+                TampilkanData()
             }
         })
     }
