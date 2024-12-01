@@ -48,9 +48,11 @@ class taskAdapter(private val listTask: MutableList<Task>) : RecyclerView.Adapte
         var Task = listTask[position]
 
         if (Task.status == "idle") {
+            holder._btnUbah.isEnabled = true
             holder._btnKerjakan.visibility = View.VISIBLE
             holder._btnSelesai.visibility = View.GONE
         } else if (Task.status == "ongoing") {
+            holder._btnUbah.isEnabled = false
             holder._btnKerjakan.visibility = View.GONE
             holder._btnSelesai.visibility = View.VISIBLE
         }
