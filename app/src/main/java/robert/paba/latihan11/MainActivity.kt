@@ -69,37 +69,6 @@ class MainActivity : AppCompatActivity() {
         TambahData()
         TampilkanData()
 
-
-//        // Inisialisasi RecyclerView
-//        rvTask = findViewById(R.id.rvTask)
-
-//        // Ambil data dari SharedPreferences
-//        val sharedPreferences = getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
-//        val namaTask = sharedPreferences.getString("namaTask", "Tidak ada data") ?: "Tidak ada data"
-//        val tanggal = sharedPreferences.getString("tanggal", "Tidak ada data") ?: "Tidak ada data"
-//        val kategori = sharedPreferences.getString("kategori", "Tidak ada data") ?: "Tidak ada data"
-//        val deskripsi = sharedPreferences.getString("deskripsi", "Tidak ada data") ?: "Tidak ada data"
-
-//        // Buat daftar task dengan MutableList
-//        val taskList = mutableListOf(
-//            Task(namaTask, tanggal, kategori, deskripsi)
-//        )
-
-//        // Atur Adapter dan LayoutManager untuk RecyclerView
-//        taskAdapter = taskAdapter(taskList)
-//        rvTask.layoutManager = LinearLayoutManager(this)
-//        rvTask.adapter = taskAdapter
-
-//        // Callback untuk hapus data
-//        taskAdapter.setOnItemClickCallback(object : taskAdapter.OnItemClickCallback {
-//            override fun delData(pos: Int) {
-//                namaTask.removeAt(pos)
-//                tanggal.removeAt(pos)
-//                kategori.removeAt(pos)
-//                deskripsi.removeAt(pos_)
-//            }
-//        })
-
     }
 
     fun SiapkanData() {
@@ -122,31 +91,39 @@ class MainActivity : AppCompatActivity() {
 
 
     fun TambahData() {
-        // Bersihkan daftar task untuk menyimpan data baru
-        arTask.clear()
+        // Ambil data terbaru dari SharedPreferences
+        val gson = Gson()
+        val isiSP = sp.getString("spTask", null)
+        val type = object : TypeToken<ArrayList<Task>>() {}.type
 
-        // Tambahkan semua data dari list lokal ke daftar task
-        for (position in _namaTask.indices) {
-            val data = Task(
-                _namaTask[position],
-                _tanggal[position],
-                _kategori[position],
-                _deskripsi[position]
-            )
-            arTask.add(data)
+        arTask.clear() // Bersihkan daftar task
+
+        // Jika ada data di SharedPreferences, tambahkan ke daftar
+        if (isiSP != null) {
+            arTask = gson.fromJson(isiSP, type)
         }
 
-        // Simpan daftar task ke SharedPreferences
-        val gson = Gson()
-        val editor = sp.edit()
-        val json = gson.toJson(arTask)
-        editor.putString("spTask", json)
-        editor.apply()
+        // Reset daftar lokal
+        _namaTask.clear()
+        _tanggal.clear()
+        _kategori.clear()
+        _deskripsi.clear()
+
+        // Sinkronkan daftar lokal dengan arTask
+        arTask.forEach {
+            _namaTask.add(it.nama)
+            _tanggal.add(it.tanggal)
+            _kategori.add(it.kategori)
+            _deskripsi.add(it.deskripsi)
+        }
     }
 
 
 
+
     fun TampilkanData() {
+        TambahData() // Pastikan data selalu diperbarui
+
         rvTask = findViewById(R.id.rvTask)
         rvTask.layoutManager = LinearLayoutManager(this)
 
@@ -168,11 +145,20 @@ class MainActivity : AppCompatActivity() {
                 _kategori.removeAt(pos)
                 _deskripsi.removeAt(pos)
 
-                // Perbarui RecyclerView
-                taskAdapter.notifyDataSetChanged()
+                // Simpan perubahan ke SharedPreferences
+                val gson = Gson()
+                val editor = sp.edit()
+                arTask.removeAt(pos)
+                val json = gson.toJson(arTask)
+                editor.putString("spTask", json)
+                editor.apply()
+
+                TambahData()
+                TampilkanData()
             }
         })
     }
+
 
 
 }
