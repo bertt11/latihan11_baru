@@ -16,6 +16,11 @@ class MainActivity : AppCompatActivity() {
     private lateinit var rvTask: RecyclerView
     private lateinit var taskAdapter: taskAdapter
 
+    private var _namaTask : MutableList<String> = emptyList<String>().toMutableList()
+    private var _tanggal : MutableList<String> = emptyList<String>().toMutableList()
+    private var _kategori : MutableList<String> = emptyList<String>().toMutableList()
+    private var _deskripsi : MutableList<String> = emptyList<String>().toMutableList()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
@@ -33,39 +38,36 @@ class MainActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-//        _rvTask = findViewById(R.id.rvTask)
-//
-////        val tvNamaTask = findViewById<TextView>(R.id.tvNama)
-////        val tvTanggal = findViewById<TextView>(R.id.tvTanggal)
-////        val tvKategori = findViewById<TextView>(R.id.tvKategori)
-////        val tvDeskripsi = findViewById<TextView>(R.id.tvDeskripsi)
-//
+        // Inisialisasi RecyclerView
+        rvTask = findViewById(R.id.rvTask)
+
 //        // Ambil data dari SharedPreferences
 //        val sharedPreferences = getSharedPreferences("MyAppPreferences", Context.MODE_PRIVATE)
 //        val namaTask = sharedPreferences.getString("namaTask", "Tidak ada data") ?: "Tidak ada data"
 //        val tanggal = sharedPreferences.getString("tanggal", "Tidak ada data") ?: "Tidak ada data"
 //        val kategori = sharedPreferences.getString("kategori", "Tidak ada data") ?: "Tidak ada data"
 //        val deskripsi = sharedPreferences.getString("deskripsi", "Tidak ada data") ?: "Tidak ada data"
-//
-//        // Buat daftar task
-//        val taskList = listOf(
+
+//        // Buat daftar task dengan MutableList
+//        val taskList = mutableListOf(
 //            Task(namaTask, tanggal, kategori, deskripsi)
 //        )
-//
+
 //        // Atur Adapter dan LayoutManager untuk RecyclerView
 //        taskAdapter = taskAdapter(taskList)
 //        rvTask.layoutManager = LinearLayoutManager(this)
 //        rvTask.adapter = taskAdapter
 
+        // Callback untuk hapus data
+        taskAdapter.setOnItemClickCallback(object : taskAdapter.OnItemClickCallback {
+            override fun delData(pos: Int) {
+                namaTask.removeAt(pos)
+                tanggal.removeAt(pos)
+                kategori.removeAt(pos)
+                deskripsi.removeAt(pos_)
+            }
+        })
+
     }
-
-    private lateinit var _nama : Array<String>
-    private lateinit var _tanggal : Array<String>
-    private lateinit var _kategori : Array<String>
-    private lateinit var _deskripsi : Array<String>
-
-    private var arTask = arrayListOf<Task>()
-
-    private lateinit var _rvTask : RecyclerView
 
 }
