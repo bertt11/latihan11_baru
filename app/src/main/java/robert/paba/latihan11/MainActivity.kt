@@ -121,8 +121,6 @@ class MainActivity : AppCompatActivity() {
     }
 
 
-
-
     fun TampilkanData() {
         TambahData()
 
@@ -171,7 +169,6 @@ class MainActivity : AppCompatActivity() {
             }
 
             override fun onStartTask(pos: Int) {
-                Log.d("MainActivity", "Mulai task di posisi $pos")
                 arTask[pos].status = "ongoing"
 
                 val gson = Gson()
@@ -180,10 +177,7 @@ class MainActivity : AppCompatActivity() {
                 editor.putString("spTask", json)
                 editor.apply()
 
-                taskAdapter.notifyItemChanged(pos)
-
-                TambahData()
-                TampilkanData()
+                taskAdapter.setData(arTask)
             }
 
             override fun onFinishTask(pos: Int) {

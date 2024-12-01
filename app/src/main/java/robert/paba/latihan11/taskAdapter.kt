@@ -47,16 +47,14 @@ class taskAdapter(private val listTask: MutableList<Task>) : RecyclerView.Adapte
     override fun onBindViewHolder(holder: ListViewHolder, position: Int) {
         var Task = listTask[position]
 
-        // Atur visibilitas tombol berdasarkan status
         if (Task.status == "idle") {
-            holder._btnUbah.isEnabled = true
             holder._btnKerjakan.visibility = View.VISIBLE
             holder._btnSelesai.visibility = View.GONE
         } else if (Task.status == "ongoing") {
-            holder._btnUbah.isEnabled = false
             holder._btnKerjakan.visibility = View.GONE
             holder._btnSelesai.visibility = View.VISIBLE
         }
+
 
         holder._namaTask.setText(Task.nama)
         holder._tanggal.setText(Task.tanggal)
@@ -87,5 +85,12 @@ class taskAdapter(private val listTask: MutableList<Task>) : RecyclerView.Adapte
         notifyItemRemoved(position) // Beritahu RecyclerView untuk memperbarui tampilan
         notifyItemRangeChanged(position, listTask.size) // Sesuaikan posisi lainnya
     }
+
+    fun setData(newList: MutableList<Task>) {
+        listTask.clear()
+        listTask.addAll(newList)
+        notifyDataSetChanged()
+    }
+
 
 }
