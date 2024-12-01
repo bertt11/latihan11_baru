@@ -13,6 +13,7 @@ class taskAdapter(private val listTask: MutableList<Task>) : RecyclerView.Adapte
 
     interface OnItemClickCallback {
         fun delData(pos: Int)
+        fun onUpdateData(pos: Int)
     }
 
     fun setOnItemClickCallback (onItemClickCallback: OnItemClickCallback){
@@ -26,6 +27,7 @@ class taskAdapter(private val listTask: MutableList<Task>) : RecyclerView.Adapte
         var _deskripsi = itemView.findViewById<TextView>(R.id.tvDeskripsi)
 
         var _btnHapus =itemView.findViewById<Button>(R.id.btnHapus)
+        var _btnUbah = itemView.findViewById<Button>(R.id.btnUbah)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListViewHolder {
@@ -49,6 +51,10 @@ class taskAdapter(private val listTask: MutableList<Task>) : RecyclerView.Adapte
         holder._btnHapus.setOnClickListener {
             onItemClickCallback.delData(position)
             removeTask(position)
+        }
+
+        holder._btnUbah.setOnClickListener {
+            onItemClickCallback.onUpdateData(position)
         }
 
     }

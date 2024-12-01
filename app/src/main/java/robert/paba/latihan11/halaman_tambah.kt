@@ -26,6 +26,29 @@ class halaman_tambah : AppCompatActivity() {
         val _etDeskripsi = findViewById<EditText>(R.id.etDeskripsi)
         val _btnSimpan = findViewById<Button>(R.id.btnSimpan)
 
+        // Ambil data lama dari SharedPreferences
+        val sharedPreferences = getSharedPreferences("dataSP", Context.MODE_PRIVATE)
+        val gson = Gson()
+        val isiSP = sharedPreferences.getString("spTask", null)
+        val type = object : TypeToken<ArrayList<Task>>() {}.type
+        val taskList: ArrayList<Task> = if (isiSP != null) {
+            gson.fromJson(isiSP, type)
+        } else {
+            arrayListOf()
+        }
+
+        // Cek apakah edit mode
+        val isEditMode = intent.getBooleanExtra("editMode", false)
+        val position = intent.getIntExtra("position", -1)
+
+        if (isEditMode && position >= 0) {
+            _etNamaTask.setText(intent.getStringExtra("namaTask"))
+            _etTanggal.setText(intent.getStringExtra("tanggal"))
+            _etKategori.setText(intent.getStringExtra("kategori"))
+            _etDeskripsi.setText(intent.getStringExtra("deskripsi"))
+        }
+
+
         // Listener untuk tombol Simpan
         _btnSimpan.setOnClickListener {
             // Ambil data input dari user
@@ -40,19 +63,13 @@ class halaman_tambah : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Ambil data lama dari SharedPreferences
-            val sharedPreferences = getSharedPreferences("dataSP", Context.MODE_PRIVATE)
-            val gson = Gson()
-            val isiSP = sharedPreferences.getString("spTask", null)
-            val type = object : TypeToken<ArrayList<Task>>() {}.type
-            val taskList: ArrayList<Task> = if (isiSP != null) {
-                gson.fromJson(isiSP, type)
+            if (isEditMode && position >= 0) {
+                // Perbarui data di daftar
+                taskList[position] = Task(namaTask, tanggal, kategori, deskripsi)
             } else {
-                arrayListOf()
+                // Tambahkan data baru
+                taskList.add(Task(namaTask, tanggal, kategori, deskripsi))
             }
-
-            // Tambahkan data baru ke daftar
-            taskList.add(Task(namaTask, tanggal, kategori, deskripsi))
 
             // Simpan kembali ke SharedPreferences
             val editor = sharedPreferences.edit()
@@ -66,12 +83,14 @@ class halaman_tambah : AppCompatActivity() {
             val intent = Intent(this@halaman_tambah, MainActivity::class.java)
             startActivity(intent)
             finish()
+        }
+
+
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
                 val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
                 v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
                 insets
-            }
         }
     }
 }

@@ -156,6 +156,17 @@ class MainActivity : AppCompatActivity() {
                 TambahData()
                 TampilkanData()
             }
+
+            override fun onUpdateData(pos: Int) {
+                val intent = Intent(this@MainActivity, halaman_tambah::class.java)
+                intent.putExtra("editMode", true)
+                intent.putExtra("position", pos)
+                intent.putExtra("namaTask", _namaTask[pos])
+                intent.putExtra("tanggal", _tanggal[pos])
+                intent.putExtra("kategori", _kategori[pos])
+                intent.putExtra("deskripsi", _deskripsi[pos])
+                startActivity(intent)
+            }
         })
     }
 
